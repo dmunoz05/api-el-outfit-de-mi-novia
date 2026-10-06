@@ -5,6 +5,8 @@ export const PATRONES = ["liso", "rayas", "cuadros", "floral", "estampado", "otr
 export const ESTADOS = ["pending", "processing", "ready", "failed"] as const;
 export const TEMPORADAS = ["primavera", "verano", "otoño", "invierno"] as const;
 export const OCASIONES = ["casual", "trabajo", "cita", "fiesta", "deporte", "viaje"] as const;
+/** Largo de la prenda: decide dónde cae el dobladillo sobre el maniquí. */
+export const LARGOS = ["corto", "medio", "largo"] as const;
 
 export const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
 
@@ -31,6 +33,7 @@ export const updateGarmentSchema = z
     patron: z.enum(PATRONES).nullable(),
     material: z.string().trim().max(100).nullable(),
     formalidad: z.number().int().min(1).max(5).nullable(),
+    largo: z.enum(LARGOS).nullable(),
     temporadas: z.array(z.enum(TEMPORADAS)).max(4),
     ocasiones: z.array(z.enum(OCASIONES)).max(6),
     marca: z.string().trim().max(100).nullable(),

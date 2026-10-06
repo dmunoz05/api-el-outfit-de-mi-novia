@@ -10,6 +10,8 @@ const publicUser = {
   nombre: true,
   estiloPreferido: true,
   ciudad: true,
+  figura: true,
+  tonoPiel: true,
   createdAt: true,
 } as const;
 

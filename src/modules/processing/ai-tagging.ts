@@ -1,7 +1,7 @@
 import { aiChat, tokenBudget } from "../../lib/ai.js";
 import { AppError } from "../../common/errors/AppError.js";
 import { logger } from "../../config/logger.js";
-import { CATEGORIAS, OCASIONES, PATRONES, TEMPORADAS } from "../garments/garments.schemas.js";
+import { CATEGORIAS, LARGOS, OCASIONES, PATRONES, TEMPORADAS } from "../garments/garments.schemas.js";
 import { parseTagging, type Tagging } from "./tagging.schema.js";
 
 const SYSTEM = `Eres una estilista experta que cataloga prendas de un armario personal a partir de una foto.
@@ -13,10 +13,16 @@ Responde SOLO con un objeto JSON, sin texto adicional ni markdown, con exactamen
   "patron": uno de ${JSON.stringify(PATRONES)},
   "material": string en español (si no se distingue, tu mejor estimación, p. ej. "algodón"),
   "formalidad": entero de 1 (muy informal) a 5 (muy formal),
+  "largo": uno de ${JSON.stringify(LARGOS)} o null (ver reglas abajo),
   "temporadas": subconjunto de ${JSON.stringify(TEMPORADAS)},
   "ocasiones": subconjunto de ${JSON.stringify(OCASIONES)},
   "descripcion": una frase corta en español describiendo la prenda
 }
+Reglas de "largo" (se usa para vestir un maniquí; si la categoría es calzado, bolso o accesorio pon null):
+- top: "corto" = crop top o llega a la cintura; "medio" = llega a la cadera; "largo" = pasa la cadera (túnica, camisa larga).
+- bottom: "corto" = short o minifalda; "medio" = llega a la rodilla o a media pierna (falda midi, capri); "largo" = pantalón largo, falda maxi.
+- vestido: "corto" = sobre la rodilla; "medio" = a la rodilla o a media pierna; "largo" = maxi, hasta el tobillo.
+- outerwear: "corto" = hasta la cintura; "medio" = hasta la cadera; "largo" = hasta el muslo o más (abrigo, gabardina).
 Etiqueta solo la prenda principal de la imagen. Usa exactamente los valores permitidos.`;
 
 /** Etiqueta la prenda con el modelo multimodal. Reintenta una vez si el JSON no valida. */

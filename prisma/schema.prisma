@@ -50,6 +50,9 @@ model User {
   nombre          String
   estiloPreferido String?  @map("estilo_preferido") @db.Text
   ciudad          String?
+  // Maniquí elegido (id de figura y de tono de piel; el catálogo vive en la app).
+  figura          String?  @db.VarChar(32)
+  tonoPiel        String?  @map("tono_piel") @db.VarChar(32)
   createdAt       DateTime @default(now()) @map("created_at")
 
   garments      Garment[]
@@ -119,6 +122,8 @@ model Garment {
   patron              Patron?
   material            String?
   formalidad          Int?                @db.TinyInt
+  // Largo de la prenda (corto | medio | largo): decide dónde cae el dobladillo sobre el maniquí.
+  largo               String?             @db.VarChar(16)
   // Arreglos de texto guardados como JSON (MySQL no tiene arrays nativos).
   temporadas          Json?
   ocasiones           Json?

@@ -17,11 +17,17 @@ export const refreshSchema = z.object({
   refreshToken: z.string().min(1, "refreshToken es obligatorio"),
 });
 
+/** Catálogo del maniquí (debe coincidir con el de la app: features/mannequin/figure.ts). */
+export const FIGURAS = ["alba", "luna", "sol", "mar"] as const;
+export const TONOS_PIEL = ["porcelana", "durazno", "miel", "canela", "cacao", "ebano"] as const;
+
 export const updateProfileSchema = z
   .object({
     nombre: z.string().trim().min(1).max(100),
     estiloPreferido: z.string().trim().max(500).nullable(),
     ciudad: z.string().trim().max(100).nullable(),
+    figura: z.enum(FIGURAS).nullable(),
+    tonoPiel: z.enum(TONOS_PIEL).nullable(),
   })
   .partial();
 

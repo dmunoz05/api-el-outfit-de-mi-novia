@@ -61,6 +61,8 @@ export async function processGarment(garment: Garment): Promise<Prisma.GarmentUp
       patron: tags.patron,
       material: tags.material,
       formalidad: tags.formalidad,
+      // Solo tiene sentido para prendas que cubren el cuerpo.
+      largo: ["top", "bottom", "vestido", "outerwear"].includes(tags.categoria) ? (tags.largo ?? null) : null,
       temporadas: tags.temporadas,
       ocasiones: tags.ocasiones,
       descripcionIa: tags.descripcion,

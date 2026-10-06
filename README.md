@@ -78,6 +78,12 @@ normaliza (EXIF, 2048 px) → quita el fondo → recorta y centra con padding �
 - **IA**: DeepSeek por defecto (`AI_PROVIDER=deepseek`, `DEEPSEEK_API_KEY`; modelo `deepseek-flash`, o `deepseek-v4-pro` con `AI_MODEL`). Se usa para etiquetar prendas (la imagen va como `image_url` en base64, con modo JSON) y para recomendar outfits (solo texto). Todo pasa por `src/lib/ai.ts`; `AI_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` vuelve a Claude. El razonamiento viene desactivado (`AI_THINKING=false`) porque no hace falta y encarece. Si el etiquetado falla, la prenda queda `ready` sin etiquetas (se editan a mano). Si falla quitar el fondo: 3 intentos con backoff y luego `failed`; la original **siempre se conserva** y se puede reintentar con `POST /garments/:id/retry`.
 - `WORKER_ENABLED=false` desactiva el worker en una instancia.
 
+## Maniquí: largo de las prendas y figura del perfil
+
+- Cada prenda que cubre el cuerpo (`top`, `bottom`, `vestido`, `outerwear`) tiene un **`largo`** (`corto | medio | largo`) que etiqueta la IA y se puede corregir con `PATCH /garments/:id`. La app lo usa para que el dobladillo caiga en el lugar correcto sobre el maniquí.
+- La usuaria guarda su maniquí en el perfil: `PATCH /auth/me` con `figura` (`alba | luna | sol | mar`) y `tonoPiel` (`porcelana | durazno | miel | canela | cacao | ebano`).
+- Para completar el `largo` de prendas subidas antes de existir el campo: `npm run backfill:largo` (usa la IA; con `-- --dry` solo muestra qué haría).
+
 ## Endpoints principales (`/api/v1`, todos con `Authorization: Bearer` salvo auth)
 
 | | |

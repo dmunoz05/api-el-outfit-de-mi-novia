@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIAS, OCASIONES, PATRONES, TEMPORADAS } from "../garments/garments.schemas.js";
+import { CATEGORIAS, LARGOS, OCASIONES, PATRONES, TEMPORADAS } from "../garments/garments.schemas.js";
 
 const hex = z.string().regex(/^#[0-9a-fA-F]{6}$/);
 
@@ -14,6 +14,9 @@ export const taggingSchema = z.object({
   patron: z.enum(PATRONES),
   material: z.string().trim().min(1).max(100),
   formalidad: z.number().int().min(1).max(5),
+  // Solo aplica a top, bottom, vestido y outerwear; el modelo puede mandar null u omitirlo.
+  // Un valor desconocido no debe invalidar todo el etiquetado: se descarta.
+  largo: z.enum(LARGOS).nullish().catch(null),
   temporadas: z.array(z.enum(TEMPORADAS)).min(1).max(4),
   ocasiones: z.array(z.enum(OCASIONES)).min(1).max(6),
   descripcion: z.string().trim().min(1).max(300),
